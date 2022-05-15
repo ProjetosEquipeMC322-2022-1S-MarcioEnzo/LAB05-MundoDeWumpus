@@ -1,0 +1,1 @@
+INDEX VERSION 1.131+C:\MC322-equipe\.metadata\.plugins\org.eclipse.jdt.core
