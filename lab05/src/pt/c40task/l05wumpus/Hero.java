@@ -48,6 +48,7 @@ public class Hero extends Componente {
 				if (salaAtual.getRow() != 0) {
 					salaAtual = caverna.getSala(row - 1, column);
 					row--;
+					
 				 }
 				else
 					throw new GameException("Ainda não atravesso paredes, né =P");
@@ -65,7 +66,7 @@ public class Hero extends Componente {
 			case 's':
 				if (salaAtual.getRow() != 3) {
 					salaAtual = caverna.getSala(row + 1, column);
-					row--;
+					row++;
 				 }
 				else
 					throw new GameException("Ainda não atravesso paredes, né =P");
@@ -73,7 +74,7 @@ public class Hero extends Componente {
 			case 'd':
 				if (salaAtual.getColumn() != 3) {
 					salaAtual = caverna.getSala(row, column + 1);
-					column--;
+					column++;
 				}
 				else
 					throw new GameException("Ainda não atravesso paredes, né =P");
@@ -97,7 +98,10 @@ public class Hero extends Componente {
 	public boolean temOuro() {
 		return temOuro;
 	}
-
+	
+	public Sala getSala() {
+		return salaAtual;
+	}
 	@Override
 	public char representacao() {
 		return 'P';

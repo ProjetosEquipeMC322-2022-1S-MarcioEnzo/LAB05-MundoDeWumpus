@@ -6,4 +6,8 @@ public class Caverna {
 	public Sala getSala(int row, int column) {
 		return salas[row][column];
 	}
+	
+	public void setSala(int row,int column, Sala s) {
+		salas[row][column] = s;
+	}
 }

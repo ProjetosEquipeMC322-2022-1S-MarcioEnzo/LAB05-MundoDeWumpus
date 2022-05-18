@@ -8,7 +8,7 @@ public class Buraco extends Componente {
 
 	@Override
 	public char representacao() {
-		return 'B';
+		return 'b';
 	}
 
 }

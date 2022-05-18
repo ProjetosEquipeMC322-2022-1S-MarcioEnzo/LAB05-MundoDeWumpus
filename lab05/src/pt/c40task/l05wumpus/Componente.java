@@ -13,5 +13,13 @@ public abstract class Componente {
 			throw new GameException("Posição (" + row + "," + column + ") inválida" );
 	}
 
+	public int getRow() {
+		return row;
+	}
+	
+	public int getColumn() {
+		return column;
+	}
+	
 	public abstract char representacao();
 }
