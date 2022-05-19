@@ -1,7 +1,7 @@
 package pt.c40task.l05wumpus;
 
 public class Construtor {	
-	public void Construir(char m[][]) {
+	public static void construir(char m[][]) {
 		Sala s;
 		for(int i = 1;4 >= i; i++) {
 			for(int j = 1;4 >= j; j++) {

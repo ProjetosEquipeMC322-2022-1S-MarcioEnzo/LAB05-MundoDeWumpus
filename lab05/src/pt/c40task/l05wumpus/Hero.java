@@ -3,7 +3,7 @@ package pt.c40task.l05wumpus;
 import java.util.Random;
 
 public class Hero extends Componente {
-	private boolean temFlecha, flechaEquipada, temOuro, orgulho, vivo;
+	private boolean temFlecha, flechaEquipada, temOuro;
 	private Sala salaAtual;
 
 	public Hero(int row, int column) {
@@ -12,8 +12,14 @@ public class Hero extends Componente {
 		temFlecha = true;
 		flechaEquipada = false;
 		temOuro = false;
-		orgulho = false;
-		vivo = true;
+	}
+	
+	public boolean temFlecha() {
+		return temFlecha;
+	}
+	
+	public void perdeFlecha() {
+		temFlecha = false;
 	}
 
 	private void equiparFlecha() {
@@ -40,16 +46,17 @@ public class Hero extends Componente {
 			Random rand = new Random();
 			if (rand.nextInt(2) == 1)
 				vitoria = true;
-				orgulho = true;
 		}
-		Matar();
+		if (vitoria)
+			salaAtual.setComponente(0, null);
 		return vitoria;
 	}
 
 	private void fazMovimento(char move) {
 		switch (move) {
 			case 'w':
-				if (salaAtual.getRow() != 0) {
+				if (salaAtual.getRow() != 1) {
+					salaAtual.setComponente(1, null);
 					salaAtual = caverna.getSala(row - 1, column);
 					row--;
 				 }
@@ -58,7 +65,8 @@ public class Hero extends Componente {
 			break;
 			
 			case 'a':
-				if (salaAtual.getColumn() != 0) {
+				if (salaAtual.getColumn() != 1) {
+					salaAtual.setComponente(1, null);
 					salaAtual = caverna.getSala(row, column - 1);
 					column--;
 				}
@@ -67,7 +75,8 @@ public class Hero extends Componente {
 				break;
 			
 			case 's':
-				if (salaAtual.getRow() != 3) {
+				if (salaAtual.getRow() != 4) {
+					salaAtual.setComponente(1, null);
 					salaAtual = caverna.getSala(row + 1, column);
 					row++;
 				 }
@@ -75,7 +84,8 @@ public class Hero extends Componente {
 					throw new GameException("Ainda não atravesso paredes, né =P");
 				break;
 			case 'd':
-				if (salaAtual.getColumn() != 3) {
+				if (salaAtual.getColumn() != 4) {
+					salaAtual.setComponente(1, null);
 					salaAtual = caverna.getSala(row, column + 1);
 					column++;
 				}
@@ -85,6 +95,8 @@ public class Hero extends Componente {
 			default:
 				throw new GameException("Comando de movimento inválido");
 		}
+		salaAtual.setVisitada(true);
+		salaAtual.setComponente(1, this);
 	}
 	
 	public void realizaAcao(char comando) {
@@ -106,17 +118,6 @@ public class Hero extends Componente {
 		return salaAtual;
 	}
 	
-	public boolean isOrgulhoso() {
-		return orgulho;
-	}
-	
-	public boolean isVivo() {
-		return vivo;
-	}
-	
-	public void Matar() {
-		vivo = false;
-	}
 	@Override
 	public char representacao() {
 		return 'P';

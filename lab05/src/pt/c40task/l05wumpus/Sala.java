@@ -12,7 +12,7 @@ public class Sala {
 		this.column = column;
 		this.caverna = caverna;
 		
-		visitada = (row == 0 && column == 0) ? true : false;
+		visitada = (row == 1 && column == 1) ? true : false;
 		if (componente == 'P') 
 			componentes[1] = new Hero(row, column);
 		else if (componente == 'O')
