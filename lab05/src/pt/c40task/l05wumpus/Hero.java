@@ -3,15 +3,17 @@ package pt.c40task.l05wumpus;
 import java.util.Random;
 
 public class Hero extends Componente {
-	private boolean temFlecha, flechaEquipada, temOuro;
+	private boolean temFlecha, flechaEquipada, temOuro, orgulho, vivo;
 	private Sala salaAtual;
 
 	public Hero(int row, int column) {
 		super(row, column);
-		salaAtual = caverna.getSala(0, 0);
+		salaAtual = caverna.getSala(1, 1);
 		temFlecha = true;
 		flechaEquipada = false;
 		temOuro = false;
+		orgulho = false;
+		vivo = true;
 	}
 
 	private void equiparFlecha() {
@@ -38,7 +40,9 @@ public class Hero extends Componente {
 			Random rand = new Random();
 			if (rand.nextInt(2) == 1)
 				vitoria = true;
+				orgulho = true;
 		}
+		Matar();
 		return vitoria;
 	}
 
@@ -48,7 +52,6 @@ public class Hero extends Componente {
 				if (salaAtual.getRow() != 0) {
 					salaAtual = caverna.getSala(row - 1, column);
 					row--;
-					
 				 }
 				else
 					throw new GameException("Ainda não atravesso paredes, né =P");
@@ -101,6 +104,18 @@ public class Hero extends Componente {
 	
 	public Sala getSala() {
 		return salaAtual;
+	}
+	
+	public boolean isOrgulhoso() {
+		return orgulho;
+	}
+	
+	public boolean isVivo() {
+		return vivo;
+	}
+	
+	public void Matar() {
+		vivo = false;
 	}
 	@Override
 	public char representacao() {

@@ -7,7 +7,7 @@ public class Brisa extends Componente {
 	}
 	
 	public char representacao() {
-		return 'B';
+		return 'b';
 	}
 
 }
