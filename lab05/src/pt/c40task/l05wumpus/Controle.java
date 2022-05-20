@@ -14,6 +14,10 @@ public class Controle {
 	public int getScore() {
 		return score;
 	}
+	
+	public char getStatus() {
+		return estado;
+	}
 
 	public static boolean validarCaverna() {
 		int qtdeWumpus = 0, qtdeHeroi = 0, qtdeBuraco = 0, qtdeOuro = 0;

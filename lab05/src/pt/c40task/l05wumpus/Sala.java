@@ -10,14 +10,14 @@ public class Sala {
 		this.row = row;
 		this.column = column;
 		
-		visitada = (row == 1 && column == 1) ? true : false;
+		visitada = (row == 0 && column == 0) ? true : false;
 	}
 	
 	public Sala(int row, int column, char componente) {
 		this.row = row;
 		this.column = column;
 		
-		visitada = (row == 1 && column == 1) ? true : false;
+		visitada = (row == 0 && column == 0) ? true : false;
 		if (componente == 'P') 
 			componentes[1] = new Hero(row, column);
 		else if (componente == 'O')

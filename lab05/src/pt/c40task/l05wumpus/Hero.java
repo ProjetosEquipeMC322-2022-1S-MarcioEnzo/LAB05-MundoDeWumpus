@@ -9,7 +9,7 @@ public class Hero extends Componente {
 	public Hero(int row, int column) {
 		this.row = row;
 		this.column = column;
-		salaAtual = caverna.getSala(0, 0);
+		salaAtual = caverna.getSala(row, column);
 		temFlecha = true;
 		flechaEquipada = false;
 		temOuro = false;

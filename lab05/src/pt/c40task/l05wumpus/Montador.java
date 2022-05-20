@@ -21,6 +21,14 @@ public class Montador {
 					s = new Sala(i, j, m[i][j]);
 					Componente.caverna.setSala(i, j, s);
 					}
+				else if (m[i][j] == 'B' || m[i][j] == 'W' || m[i][j] == 'O') {
+					if (m[i][j] == 'B')
+						Componente.caverna.getSala(i, j).setComponente(0, new Buraco(i, j));
+					else if (m[i][j] == 'W')
+						Componente.caverna.getSala(i, j).setComponente(0, new Wumpus(i, j));
+					else
+						Componente.caverna.getSala(i, j).setComponente(0, new Ouro());
+					}
 				}
 		}
 	}
