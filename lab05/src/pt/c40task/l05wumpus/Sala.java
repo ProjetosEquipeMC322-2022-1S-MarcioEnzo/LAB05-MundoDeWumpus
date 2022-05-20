@@ -4,19 +4,24 @@ public class Sala {
 	private int row, column;
 	private Componente[] componentes = new Componente[4];
 	private boolean visitada;
-	private Caverna caverna;
 	
 	
-	public Sala(int row, int column, char componente, Caverna caverna) {
+	public Sala(int row, int column) {
 		this.row = row;
 		this.column = column;
-		this.caverna = caverna;
+		
+		visitada = (row == 1 && column == 1) ? true : false;
+	}
+	
+	public Sala(int row, int column, char componente) {
+		this.row = row;
+		this.column = column;
 		
 		visitada = (row == 1 && column == 1) ? true : false;
 		if (componente == 'P') 
 			componentes[1] = new Hero(row, column);
 		else if (componente == 'O')
-			componentes[0] = new Ouro(row, column);
+			componentes[0] = new Ouro();
 		else if (componente == 'W')
 			componentes[0] = new Wumpus(row, column);
 		else if (componente == 'B')
@@ -48,4 +53,5 @@ public class Sala {
 	public void setComponente(int posicao, Componente novo) {
 		componentes[posicao] = novo;
 	}
+
 }

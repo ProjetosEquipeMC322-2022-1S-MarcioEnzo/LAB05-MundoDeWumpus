@@ -1,136 +1,108 @@
 package pt.c40task.l05wumpus;
 
 public class Controle {
-	private int pontuacao = 0;
-	private Hero personagem;
+	private int score;
+	private Hero hero;
 	private char estado;
-	Componente [] x;
-	
-	public Controle() {
-		
+
+	public Controle(Hero hero) {
+		score = 0;
+		estado = 'P';
+		this.hero = hero;
 	}
 	
-	
-	public static boolean Valido(Caverna s) {
+	public int getScore() {
+		return score;
+	}
+
+	public static boolean validarCaverna() {
 		int qtdeWumpus = 0, qtdeHeroi = 0, qtdeBuraco = 0, qtdeOuro = 0;
-		
-		for (int i = 1; i <= 4; i++) {
-			for (int j = 1; j <= 4; j++) {
-				if (Componente.getSala(row, column).getComponentes[0] instanceof Wumpus)
+
+		for (int i = 0; i <= 3; i++) {
+			for (int j = 0; j <= 3; j++) {
+				if (Componente.caverna.getSala(i, j).getComponentes()[0] instanceof Wumpus)
 					qtdeWumpus++;
-				else if (Componente.getSala(row, column).getComponentes[0] instanceof Buraco)
+				else if (Componente.caverna.getSala(i,j).getComponentes()[0] instanceof Buraco)
 					qtdeBuraco++;
-				else if (Componente.getSala(row, column).getComponentes[0] instanceof Ouro)
+				else if (Componente.caverna.getSala(i,j).getComponentes()[0] instanceof Ouro)
 					qtdeOuro++;
-				if (Componente.getSala(row, column).getComponentes[1] != null)
+				if (Componente.caverna.getSala(i,j).getComponentes()[1] != null)
 					qtdeHeroi++;
 			}
 		}
 		return qtdeHeroi == 1 && qtdeWumpus == 1 && qtdeOuro == 1 && (qtdeBuraco == 2 || qtdeBuraco == 3);
-	}
-		
-	void Adicionar_Pontos(int x) {
-		pontuacao += x;
+
 	}
 	
-	void Comando(char acao) {
-		if(acao == 'q') {
-			this.quitgame();
+	public boolean vencedor() {
+		if (hero.temOuro() && hero.getRow() == 0 && hero.getColumn() == 0)
+			return true;
+		return false;
+	}
+	
+	public void adicionarPontos(int pontos) {
+		this.score += pontos;
+	}
+	
+	public void realizarComando(char comando) {
+		if (comando == 'q') {
+			quitGame();
 			return;
 		}
-		personagem.realizaAcao(acao);
-		switch(acao) {
-		case 'w':;
-		case 's':;
-		case 'd':;
-		case 'a':Adicionar_Pontos(-15);break;
-		case 'k':Adicionar_Pontos(-100);break;
-		default:break;
-		}
-		Sala x = personagem.getSala();
-			if(x.getComponentes[0] instanceof Wumpus) {
-					if(personagem.enfrentaWumpus()) {
-						Adicionar_Pontos(500);
-					}
-					else {
-						Adicionar_Pontos(-1000);
-						estado = 'L';
-					}
+		hero.realizaAcao(comando);
+		if (isAMove(comando)) {
+			adicionarPontos(-15);
+			if (hero.getSala().getComponentes()[0] instanceof Wumpus) {
+				boolean sucesso = hero.enfrentaWumpus();
+				if (!sucesso) {
+					estado = 'L';
+					adicionarPontos(-1000);
+					quitGame();
+					return;
+				}
+				else {
+					adicionarPontos(500);
+					System.out.println("O Wumpus está morto!");
+				}
 			}
-			else if(x.getComponentes[0] instanceof Buraco) {
-				Adicionar_Pontos(-1000);
-				estado = 'L';
-				personagem.Morrer();
-			}
-			if (estado == 'L')
+			else if (hero.getSala().getComponentes()[0] instanceof Buraco) {
+				adicionarPontos(-1000);
+				System.out.println("AHHHHHHHHHHHhhhhhh.....");
+				quitGame();
 				return;
-			if (personagem.temFlecha() && acao != 'k') {
-				personagem.perdeFlecha();
-				System.out.println("Droga! Gastei minha única flecha a toa.");
 			}
-			if(x.getComponentes[2] instanceof Fedor) {
-				System.out.println("O heroi sente um cheiro forte");
+			if (hero.temFlecha()) {
+				hero.perdeFlecha();
+				System.out.println("Droga! Acabei de perder a minha única flecha. Tomara que não encontre o Wumpus");
 			}
-			if(x.getComponentes[3] instanceof Brisa) {
-				System.out.println("O heroi sente um vento gelado");
-			}
+			if (hero.getSala().getComponentes()[2] != null)
+				System.out.println("Que catinga horrível é essa? Abriram uma vala?");
+			if (hero.getSala().getComponentes()[3] != null)
+				System.out.println("Sinto um vento frio, melhor tomar cuidado.");
 		}
+		if (comando == 'k')
+			adicionarPontos(-100);
 	}
 	
-	public void setGame() {
-		this.personagem = new Hero(1, 1);
-		this.estado = 'P';
-	}
-
-	public boolean Vencedor() {
-		boolean venceu = false;
-		if(heroi.temOuro() == true) {
-			if(personagem.getSala().getRow() == 1 && 
-				personagem.getSala().getColumn() == 1) {
-				venceu = true;
-				this.estado = 'W';
-			}
-		}
-		return venceu;
-	}
-	
-	public void estadodejogo() {
-		System.out.println("score:" + " " + pontuacao);
+	public void estadoDeJogo() {
+		System.out.println("score:" + " " + score);
 		System.out.println("status:" + " " + estado);
 	}
 	
-	public void quitgame() {
-		this.estadodejogo();
-		if(this.Vencedor(personagem) == true) {
+	public void quitGame() {
+		this.estadoDeJogo();
+		if(vencedor()) {
 			System.out.println("Voce ganhou =D !!!");
-			return;
 		}
-		if(estado == 'L') {
+		else if(estado == 'L') {
 			System.out.println("Voce perdeu =(...");
 			return;
 		}
-		System.out.println("Volte sempre !");
-	}
-	
-	public static void imprimirJogo(Caverna caverna) {
-		for (int i = 1; i <= 4; i++) {
-			for (int j = 1; j <= 4; j++) {
-				if (!caverna.getSala(i, j).isVisitada())
-					System.out.print("_");
-				else if (caverna.getSala(i, j).getComponentes[0] != null)
-					System.out.print(caverna.getSala(i, j).getComponentes[0].representacao());
-				else if (caverna.getSala(i, j).getComponentes[1] != null)
-					System.out.print(caverna.getSala(i, j).getComponentes[1].representacao());
-				else if (caverna.getSala(i, j).getComponentes[2] != null)
-					System.out.print(caverna.getSala(i, j).getComponentes[2].representacao());
-				else if (caverna.getSala(i, j).getComponentes[3] != null)
-					System.out.print(caverna.getSala(i, j).getComponentes[3].representacao());
-				else
-					System.out.print("#");
-				
-			}
-			System.out.println();
+		else {
+			System.out.println("Volte sempre !");
 		}
 	}
-	
+	private boolean isAMove(char comando) {
+		return comando == 'w' || comando == 'a' || comando == 's' || comando == 'd';
+	}
 }

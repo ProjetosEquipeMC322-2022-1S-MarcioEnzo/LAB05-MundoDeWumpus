@@ -7,8 +7,9 @@ public class Hero extends Componente {
 	private Sala salaAtual;
 
 	public Hero(int row, int column) {
-		super(row, column);
-		salaAtual = caverna.getSala(1, 1);
+		this.row = row;
+		this.column = column;
+		salaAtual = caverna.getSala(0, 0);
 		temFlecha = true;
 		flechaEquipada = false;
 		temOuro = false;
@@ -17,7 +18,7 @@ public class Hero extends Componente {
 	public boolean temFlecha() {
 		return temFlecha;
 	}
-	
+
 	public void perdeFlecha() {
 		temFlecha = false;
 	}
@@ -29,14 +30,13 @@ public class Hero extends Componente {
 		} else
 			throw new GameException("O herói não tem flechas para equipar");
 	}
-	
+
 	private void pegaOuro() {
 		if (salaAtual.getComponentes()[0] instanceof Ouro) {
 			salaAtual.setComponente(0, null);
 			temOuro = true;
 			System.out.println("UHUUU! Tô rico !!! =D");
-		}
-		else
+		} else
 			throw new GameException("Não tem ouro aqui =(");
 	}
 
@@ -54,53 +54,49 @@ public class Hero extends Componente {
 
 	private void fazMovimento(char move) {
 		switch (move) {
-			case 'w':
-				if (salaAtual.getRow() != 1) {
-					salaAtual.setComponente(1, null);
-					salaAtual = caverna.getSala(row - 1, column);
-					row--;
-				 }
-				else
-					throw new GameException("Ainda não atravesso paredes, né =P");
+		case 'w':
+			if (salaAtual.getRow() != 0) {
+				salaAtual.setComponente(1, null);
+				salaAtual = caverna.getSala(row - 1, column);
+				row--;
+			} else
+				throw new GameException("Ainda não atravesso paredes, né =P");
 			break;
-			
-			case 'a':
-				if (salaAtual.getColumn() != 1) {
-					salaAtual.setComponente(1, null);
-					salaAtual = caverna.getSala(row, column - 1);
-					column--;
-				}
-				else
-					throw new GameException("Ainda não atravesso paredes, né =P");
-				break;
-			
-			case 's':
-				if (salaAtual.getRow() != 4) {
-					salaAtual.setComponente(1, null);
-					salaAtual = caverna.getSala(row + 1, column);
-					row++;
-				 }
-				else
-					throw new GameException("Ainda não atravesso paredes, né =P");
-				break;
-			case 'd':
-				if (salaAtual.getColumn() != 4) {
-					salaAtual.setComponente(1, null);
-					salaAtual = caverna.getSala(row, column + 1);
-					column++;
-				}
-				else
-					throw new GameException("Ainda não atravesso paredes, né =P");
-				break;
-			default:
-				throw new GameException("Comando de movimento inválido");
+
+		case 'a':
+			if (salaAtual.getColumn() != 0) {
+				salaAtual.setComponente(1, null);
+				salaAtual = caverna.getSala(row, column - 1);
+				column--;
+			} else
+				throw new GameException("Ainda não atravesso paredes, né =P");
+			break;
+
+		case 's':
+			if (salaAtual.getRow() != 3) {
+				salaAtual.setComponente(1, null);
+				salaAtual = caverna.getSala(row + 1, column);
+				row++;
+			} else
+				throw new GameException("Ainda não atravesso paredes, né =P");
+			break;
+		case 'd':
+			if (salaAtual.getColumn() != 3) {
+				salaAtual.setComponente(1, null);
+				salaAtual = caverna.getSala(row, column + 1);
+				column++;
+			} else
+				throw new GameException("Ainda não atravesso paredes, né =P");
+			break;
+		default:
+			throw new GameException("Comando de movimento inválido");
 		}
 		salaAtual.setVisitada(true);
 		salaAtual.setComponente(1, this);
 	}
-	
+
 	public void realizaAcao(char comando) {
-		if (comando == 'w' || comando == 'a' || comando == 's' || comando == 'd') 
+		if (comando == 'w' || comando == 'a' || comando == 's' || comando == 'd')
 			fazMovimento(comando);
 		else if (comando == 'k')
 			equiparFlecha();
@@ -109,15 +105,15 @@ public class Hero extends Componente {
 		else
 			throw new GameException("Ação inválida! Digite Novamente.");
 	}
-	
+
 	public boolean temOuro() {
 		return temOuro;
 	}
-	
+
 	public Sala getSala() {
 		return salaAtual;
 	}
-	
+
 	@Override
 	public char representacao() {
 		return 'P';

@@ -1,7 +1,5 @@
 package pt.c40task.l05wumpus;
 
-import java.util.Scanner;
-
 public class AppWumpus {
 
    public static void main(String[] args) {
@@ -16,18 +14,15 @@ public class AppWumpus {
       Toolkit tk = Toolkit.start(arquivoCaverna, arquivoSaida, arquivoMovimentos);
       
       String cave[][] = tk.retrieveCave();
-      Construtor.construir(cave);
-      
-      if (arquivoSaida == null) {
-    	  Scanner keyboard = new Scanner(System.in);
-    	  
-      }
+      char caverna[][] = new char[4][4];
       System.out.println("=== Caverna");
-      for (int l = 0; l < cave.length; l++) {
-         for (int c = 0; c < cave[l].length; c++)
-            System.out.print(cave[l][c] + ((c < cave[l].length-1) ? ", " : ""));
-         System.out.println();
+      for (int l = 2; l < cave.length; l = l + 3) {
+         for (int c = 2; c < cave[l].length; c = c + 3) {
+        	 caverna[Integer.parseInt(cave[l][c-2]) - 1][Integer.parseInt(cave[l][c-1]) - 1] = cave[l][c].charAt(0);
+         }
       }
+      Montador.construir(caverna);
+      Controle controle = new Controle((Hero) Componente.caverna.getSala(0, 0).getComponentes()[1]);
       
       String movements = tk.retrieveMovements();
       System.out.println("=== Movimentos");
