@@ -1,5 +1,8 @@
 package pt.c40task.l05wumpus;
 
+import java.io.IOException;
+import java.util.Scanner;
+
 public class AppWumpus {
 
    public static void main(String[] args) {
@@ -11,56 +14,72 @@ public class AppWumpus {
    
    public static void executaJogo(String arquivoCaverna, String arquivoSaida,
                                   String arquivoMovimentos) {
-      Toolkit tk = Toolkit.start(arquivoCaverna, arquivoSaida, arquivoMovimentos);
-      Componente.caverna = new Caverna();
-      
-      String cave[][] = tk.retrieveCave();
-      char caverna[][] = new char[4][4];
-      System.out.println("=== Caverna");
-      for (int l = 0; l < cave.length; l++) {
-         for (int c = 2; c < cave[l].length; c = c + 3) {
-        	 caverna[Integer.parseInt(cave[l][c-2]) - 1][Integer.parseInt(cave[l][c-1]) - 1] = cave[l][c].charAt(0);
-         }
-      }
-      Montador.construir(caverna);
-      if (!Controle.validarCaverna())
-    	  throw new GameException("Caverna Inválida");
-      Controle controle = new Controle((Hero) Componente.caverna.getSala(0, 0).getComponentes()[1]);
-      Montador.imprimirJogo(controle);
-      tk.writeBoard(Componente.caverna.matrizDeCaracteres(), controle.getScore(), controle.getStatus());
-      
-      String movements = tk.retrieveMovements();
-      for (int i = 0; i < movements.length(); i++) {
-    	  controle.realizarComando(movements.charAt(i));
-    	  Montador.imprimirJogo(controle);
-    	  tk.writeBoard(Componente.caverna.matrizDeCaracteres(),controle.getScore(), controle.getStatus());
-      }
-      System.out.println("=== Movimentos");
-      System.out.println(movements);
-      
-      System.out.println("=== Caverna Intermediaria");
-      char partialCave[][] = {
-         {'#', '#', 'b', '-'},
-         {'#', 'b', '-', '-'},
-         {'b', '-', '-', '-'},
-         {'p', '-', '-', '-'}
-      };
-      int score = -120;
-      char status = 'x'; // 'w' para venceu; 'n' para perdeu; 'x' intermediÃ¡rias
-      tk.writeBoard(partialCave, score, status);
-
-      System.out.println("=== Ãšltima Caverna");
-      char finalCave[][] = {
-         {'#', '#', 'b', '-'},
-         {'#', 'b', '#', 'f'},
-         {'b', '-', '-', 'w'},
-         {'#', '-', '-', '-'}
-      };
-      score = -1210;
-      status = 'n'; // 'w' para venceu; 'n' para perdeu; 'x' intermediÃ¡rias
-      tk.writeBoard(finalCave, score, status);
-      
-      tk.stop();
+	  try {
+	      Toolkit tk = Toolkit.start(arquivoCaverna, arquivoSaida, arquivoMovimentos);
+	      
+	      Componente.caverna = new Caverna();
+	      String cave[][] = tk.retrieveCave();
+	      char caverna[][] = new char[4][4];
+	      for (int l = 0; l < cave.length; l++) {
+	         for (int c = 2; c < cave[l].length; c = c + 3) {
+	        	 caverna[Integer.parseInt(cave[l][c-2]) - 1][Integer.parseInt(cave[l][c-1]) - 1] = cave[l][c].charAt(0);
+	         }
+	      }
+	      Montador.construir(caverna);
+	      if (!Controle.validarCaverna())
+	    	  throw new GameException("Caverna Inválida");
+	      Controle controle = new Controle((Hero) Componente.caverna.getSala(0, 0).getComponentes()[1]);
+	      Montador.imprimirJogo(controle);
+	      tk.writeBoard(Componente.caverna.matrizDeCaracteres(), controle.getScore(), controle.getStatus());
+	      
+	      String movements = tk.retrieveMovements();
+	      int count = 0;
+	      while (count < movements.length() && controle.getStatus() == 'P') {
+	    	  try {
+		    	  controle.realizarComando(movements.charAt(count));
+		    	  Montador.imprimirJogo(controle);
+		    	  tk.writeBoard(Componente.caverna.matrizDeCaracteres(),controle.getScore(), controle.getStatus());
+		    	  count++;
+	    	  }
+	    	  catch (GameException gameError) {
+	    		  System.out.println(gameError.getMessage());
+	    	  }
+	      }
+	      tk.stop();
+	  }
+	  catch (IOException e) {
+		  Toolkit tk = Toolkit.start(arquivoCaverna, arquivoSaida);
+		  
+		  Componente.caverna = new Caverna();
+	      String cave[][] = tk.retrieveCave();
+	      char caverna[][] = new char[4][4];
+	      for (int l = 0; l < cave.length; l++) {
+	         for (int c = 2; c < cave[l].length; c = c + 3) {
+	        	 caverna[Integer.parseInt(cave[l][c-2]) - 1][Integer.parseInt(cave[l][c-1]) - 1] = cave[l][c].charAt(0);
+	         }
+	      }
+	      Montador.construir(caverna);
+	      if (!Controle.validarCaverna())
+	    	  throw new GameException("Caverna Inválida");
+	      Scanner keyboard = new Scanner(System.in);
+	      Controle controle = new Controle((Hero) Componente.caverna.getSala(0, 0).getComponentes()[1]);
+	      Montador.imprimirJogo(controle);
+	      tk.writeBoard(Componente.caverna.matrizDeCaracteres(), controle.getScore(), controle.getStatus());
+	      
+	      while (controle.getStatus() == 'P') {
+	    	  try {
+	    		  controle.realizarComando(keyboard.nextLine().charAt(0));
+	    	  }
+	    	  catch (GameException gameError) {
+	    		  System.out.println(gameError.getMessage());
+	    		  Montador.imprimirJogo(controle);
+		    	  tk.writeBoard(Componente.caverna.matrizDeCaracteres(),controle.getScore(), controle.getStatus());
+	    	  }
+	      }
+	      
+	      keyboard.close();
+	      tk.stop();
+	  }
    }
 
 }

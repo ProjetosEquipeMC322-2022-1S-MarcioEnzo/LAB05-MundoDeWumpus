@@ -10,6 +10,7 @@ public class Montador {
 			}
 			System.out.println();
 		}
+		System.out.println("Status: " + controle.getStatus());
 		System.out.println("Score: " + controle.getScore());
 	}
 	
@@ -32,6 +33,5 @@ public class Montador {
 				}
 		}
 	}
-
 
 }

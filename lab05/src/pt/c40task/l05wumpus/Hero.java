@@ -4,23 +4,22 @@ import java.util.Random;
 
 public class Hero extends Componente {
 	private boolean temFlecha, flechaEquipada, temOuro;
-	private Sala salaAtual;
 
 	public Hero(int row, int column) {
 		this.row = row;
 		this.column = column;
-		salaAtual = caverna.getSala(row, column);
 		temFlecha = true;
 		flechaEquipada = false;
 		temOuro = false;
 	}
 	
-	public boolean temFlecha() {
-		return temFlecha;
+	public boolean flechaEquipada() {
+		return flechaEquipada;
 	}
 
 	public void perdeFlecha() {
 		temFlecha = false;
+		flechaEquipada = false;
 	}
 
 	private void equiparFlecha() {
@@ -32,6 +31,7 @@ public class Hero extends Componente {
 	}
 
 	private void pegaOuro() {
+		Sala salaAtual = getSala();
 		if (salaAtual.getComponentes()[0] instanceof Ouro) {
 			salaAtual.setComponente(0, null);
 			temOuro = true;
@@ -41,6 +41,7 @@ public class Hero extends Componente {
 	}
 
 	public boolean enfrentaWumpus() {
+		Sala salaAtual = getSala();
 		boolean vitoria = false;
 		if (flechaEquipada) {
 			Random rand = new Random();
@@ -53,11 +54,11 @@ public class Hero extends Componente {
 	}
 
 	private void fazMovimento(char move) {
+		Sala salaAtual = getSala();
 		switch (move) {
 		case 'w':
 			if (salaAtual.getRow() != 0) {
 				salaAtual.setComponente(1, null);
-				salaAtual = caverna.getSala(row - 1, column);
 				row--;
 			} else
 				throw new GameException("Ainda não atravesso paredes, né =P");
@@ -66,7 +67,6 @@ public class Hero extends Componente {
 		case 'a':
 			if (salaAtual.getColumn() != 0) {
 				salaAtual.setComponente(1, null);
-				salaAtual = caverna.getSala(row, column - 1);
 				column--;
 			} else
 				throw new GameException("Ainda não atravesso paredes, né =P");
@@ -75,7 +75,6 @@ public class Hero extends Componente {
 		case 's':
 			if (salaAtual.getRow() != 3) {
 				salaAtual.setComponente(1, null);
-				salaAtual = caverna.getSala(row + 1, column);
 				row++;
 			} else
 				throw new GameException("Ainda não atravesso paredes, né =P");
@@ -83,7 +82,6 @@ public class Hero extends Componente {
 		case 'd':
 			if (salaAtual.getColumn() != 3) {
 				salaAtual.setComponente(1, null);
-				salaAtual = caverna.getSala(row, column + 1);
 				column++;
 			} else
 				throw new GameException("Ainda não atravesso paredes, né =P");
@@ -91,6 +89,7 @@ public class Hero extends Componente {
 		default:
 			throw new GameException("Comando de movimento inválido");
 		}
+		salaAtual = getSala();
 		salaAtual.setVisitada(true);
 		salaAtual.setComponente(1, this);
 	}
@@ -111,7 +110,7 @@ public class Hero extends Componente {
 	}
 
 	public Sala getSala() {
-		return salaAtual;
+		return caverna.getSala(row, column);
 	}
 
 	@Override

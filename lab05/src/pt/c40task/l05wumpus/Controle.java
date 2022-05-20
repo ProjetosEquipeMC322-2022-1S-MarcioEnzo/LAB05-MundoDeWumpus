@@ -75,7 +75,7 @@ public class Controle {
 				quitGame();
 				return;
 			}
-			if (hero.temFlecha()) {
+			if (hero.flechaEquipada()) {
 				hero.perdeFlecha();
 				System.out.println("Droga! Acabei de perder a minha única flecha. Tomara que não encontre o Wumpus");
 			}
@@ -86,6 +86,9 @@ public class Controle {
 		}
 		if (comando == 'k')
 			adicionarPontos(-100);
+		if (vencedor()) {
+			quitGame();
+		}
 	}
 	
 	public void estadoDeJogo() {
@@ -96,6 +99,8 @@ public class Controle {
 	public void quitGame() {
 		this.estadoDeJogo();
 		if(vencedor()) {
+			adicionarPontos(1000);
+			estado = 'W';
 			System.out.println("Voce ganhou =D !!!");
 		}
 		else if(estado == 'L') {
@@ -103,6 +108,7 @@ public class Controle {
 			return;
 		}
 		else {
+			estado = 'Q';
 			System.out.println("Volte sempre !");
 		}
 	}
