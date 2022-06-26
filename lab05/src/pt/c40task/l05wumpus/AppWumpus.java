@@ -69,6 +69,7 @@ public class AppWumpus {
 	      while (controle.getStatus() == 'P') {
 	    	  try {
 	    		  controle.realizarComando(keyboard.nextLine().charAt(0));
+	    		  Montador.imprimirJogo(controle);
 	    	  }
 	    	  catch (GameException gameError) {
 	    		  System.out.println(gameError.getMessage());

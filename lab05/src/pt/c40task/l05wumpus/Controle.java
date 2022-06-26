@@ -72,6 +72,7 @@ public class Controle {
 			else if (hero.getSala().getComponentes()[0] instanceof Buraco) {
 				adicionarPontos(-1000);
 				System.out.println("AHHHHHHHHHHHhhhhhh.....");
+				estado = 'L';
 				quitGame();
 				return;
 			}
