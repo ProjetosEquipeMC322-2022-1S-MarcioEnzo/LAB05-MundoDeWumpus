@@ -1,2 +1,3 @@
-# LAB05-MundoDeWumpus
-Repositório dedicado ao jogo "Mundo de Wumpus" que deverá ser feito no lab 05
+# Projetos em equipe
+Repositório dedicado aos jogos feitos pela equipe KoreanCofee Warriors
+
