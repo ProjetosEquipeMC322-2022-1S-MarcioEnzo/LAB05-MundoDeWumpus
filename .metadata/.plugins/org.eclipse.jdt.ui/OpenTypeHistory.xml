@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <typeInfoHistroy>
     <typeInfo handle="=chess_game/C:\/eclipse\/plugins\/org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_16.0.2.v20210721-1149\/jre\/lib\/jrt-fs.jar`java.desktop=/module=/true=/=/javadoc_location=/https:\/\/docs.oracle.com\/en\/java\/javase\/16\/docs\/api\/=/&lt;javax.swing(JFrame.class[JFrame" modifiers="33" timestamp="1626879100000"/>
+    <typeInfo handle="=chess_game/src&lt;view{IMenu.java[IMenu" modifiers="513" timestamp="1656376503435"/>
+    <typeInfo handle="=chess_game/C:\/eclipse\/plugins\/org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_16.0.2.v20210721-1149\/jre\/lib\/jrt-fs.jar`java.desktop=/module=/true=/=/javadoc_location=/https:\/\/docs.oracle.com\/en\/java\/javase\/16\/docs\/api\/=/&lt;javax.imageio.stream(ImageOutputStream.class[ImageOutputStream" modifiers="1537" timestamp="1626879100000"/>
+    <typeInfo handle="=chess_game/src&lt;view{IBoardGameGUI.java[IBoardGameGUI" modifiers="513" timestamp="1656426008035"/>
 </typeInfoHistroy>

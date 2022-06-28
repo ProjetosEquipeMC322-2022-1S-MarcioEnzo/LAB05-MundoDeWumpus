@@ -1,5 +1,4 @@
 INDEX VERSION 1.131+C:\MC322-equipe\.metadata\.plugins\org.eclipse.jdt.core
 3614477979.index
 851528089.index
-3025784652.index
 1865797976.index

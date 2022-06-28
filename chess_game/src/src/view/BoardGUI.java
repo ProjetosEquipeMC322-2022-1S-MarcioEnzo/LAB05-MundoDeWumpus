@@ -57,7 +57,7 @@ public class BoardGUI extends JFrame implements IBoardGameGUI {
 		this.multiplayer = multiplayer;
 		squares = new JButton[8][8];
 		panel.setLayout(new GridLayout(8, 8));
-		ButtonHandler buttonHandler = new ButtonHandler();
+		ButtonHandler buttonHandler = new ButtonHandler(); //classe interna que age como Observer
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
 				squares[i][j] = new JButton();
