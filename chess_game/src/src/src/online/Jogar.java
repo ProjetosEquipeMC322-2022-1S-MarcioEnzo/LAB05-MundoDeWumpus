@@ -113,7 +113,6 @@ public class Jogar {
 
 	public void setarPrioridade() throws IOException {
 		prioridade = (((Integer) network.read()) == 1) ? 2 : 1;
-		System.out.println("Ok");
 	}
 
 	public int getPrioridade() {
@@ -153,6 +152,7 @@ public class Jogar {
 							JOptionPane.showMessageDialog(jogo.getGameFrame(), "Você está em xeque, cuidado!", "Xeque", JOptionPane.WARNING_MESSAGE);
 						if (chessMatch != null && color == chessMatch.getCurrentPlayer()) {
 							while (color == chessMatch.getCurrentPlayer()) {
+								Thread.sleep(10);
 							}
 							jogo.enviarPartida(chessMatch);
 						} else {
@@ -185,6 +185,7 @@ public class Jogar {
 							JOptionPane.showMessageDialog(jogo.getGameFrame(), "Você está em xeque, cuidado!", "Xeque", JOptionPane.WARNING_MESSAGE);
 						if (chessMatch != null && color == chessMatch.getCurrentPlayer()) {
 							while (color == chessMatch.getCurrentPlayer()) {
+								Thread.sleep(10);
 							}
 							jogo.enviarPartida(chessMatch);
 						} else {
@@ -196,7 +197,10 @@ public class Jogar {
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
-				}  finally {
+				}	catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				finally {
 					jogo.fecharServidor();
 				}
 			}

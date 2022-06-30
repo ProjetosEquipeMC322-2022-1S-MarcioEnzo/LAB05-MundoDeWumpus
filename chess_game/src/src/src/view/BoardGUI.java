@@ -118,7 +118,7 @@ public class BoardGUI extends JFrame implements IBoardGameGUI {
 				flushPossibleMoves();
 				selectedPiece = clickedPiece;
 				showPossibleMoves();
-			} else if (selectedPiece != null && clickedPiece == null && selectedPiece.possibleMove(clickedPosition)) {
+			} else if (selectedPiece != null && selectedPiece.possibleMove(clickedPosition)) {
 				flushPossibleMoves();
 				try {
 					chessMatch.peformChessMove(selectedPiece.getPosition(), clickedPosition);

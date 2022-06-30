@@ -5339,3 +5339,6 @@ java.io.FileNotFoundException: C:\MC322-equipe\chess_game\src\online\Network.jav
 	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:659)
 	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:596)
 	at org.eclipse.equinox.launcher.Main.run(Main.java:1467)
+
+!ENTRY org.eclipse.core.resources 2 10035 2022-06-28 19:04:14.091
+!MESSAGE The workspace will exit with unsaved changes in this session.
