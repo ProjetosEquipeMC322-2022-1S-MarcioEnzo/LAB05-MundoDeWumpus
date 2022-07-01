@@ -5,6 +5,7 @@ import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -15,6 +16,7 @@ import exceptions.GameException;
 import model.Position;
 import model.chess_pieces.ChessColor;
 import model.chess_pieces.ChessPiece;
+import online.IJogo;
 
 public class BoardGUI extends JFrame implements IBoardGameGUI {
 
@@ -26,6 +28,7 @@ public class BoardGUI extends JFrame implements IBoardGameGUI {
 	private JButton[][] squares;
 	private boolean multiplayer;
 	private ChessPiece selectedPiece;
+	private IJogo jogo;
 
 	public BoardGUI(ChessMatch chessMatch, ChessColor pov) {
 		super("Chess game");
@@ -67,6 +70,10 @@ public class BoardGUI extends JFrame implements IBoardGameGUI {
 				
 			}
 		}
+	}
+	
+	public void connect(IJogo jogo) {
+		this.jogo = jogo;
 	}
 
 	public void setChessMatch(ChessMatch chessMatch) {
@@ -134,6 +141,13 @@ public class BoardGUI extends JFrame implements IBoardGameGUI {
 					}
 					fillBoard();
 					selectedPiece = null;
+					if (multiplayer)
+						try {
+							notifyGame();
+						}
+						catch (IOException exception) {
+							exception.printStackTrace();
+						}
 				} catch (GameException exception) {
 					JOptionPane.showMessageDialog(null, exception.getMessage(), "Chess Warning",
 							JOptionPane.WARNING_MESSAGE);
@@ -191,6 +205,11 @@ public class BoardGUI extends JFrame implements IBoardGameGUI {
 								.setBackground(((i + j) % 2 == 0) ? colorWhite : colorBlack);
 		}
 
+	}
+
+	@Override
+	public void notifyGame() throws IOException {
+		jogo.enviarPartida(chessMatch);
 	}
 
 }

@@ -14,7 +14,7 @@ import model.chess_pieces.ChessColor;
 import view.BoardGUI;
 import view.Menu;
 
-public class Jogar {
+public class Jogar implements IJogo {
 	private INetwork network;
 	private int prioridade;
 	private Player player;
@@ -118,7 +118,7 @@ public class Jogar {
 	public int getPrioridade() {
 		return prioridade;
 	}
-	
+
 	public void atualizarPartida(ChessMatch chessMatch) {
 		((BoardGUI) gameFrame).setChessMatch(chessMatch);
 	}
@@ -146,20 +146,21 @@ public class Jogar {
 					jogo.setPlayer(player);
 					jogo.getGameFrame().setVisible(false);
 					jogo.setGameFrame(player.getGUI());
+					((BoardGUI) jogo.getGameFrame()).connect(jogo);
 					jogo.start();
 					while (!chessMatch.isCheckMate() && !chessMatch.checkTie()) {
 						if (chessMatch.getCheck())
-							JOptionPane.showMessageDialog(jogo.getGameFrame(), "Você está em xeque, cuidado!", "Xeque", JOptionPane.WARNING_MESSAGE);
+							JOptionPane.showMessageDialog(jogo.getGameFrame(), "Você está em xeque, cuidado!", "Xeque",
+									JOptionPane.WARNING_MESSAGE);
 						if (chessMatch != null && color == chessMatch.getCurrentPlayer()) {
 							while (color == chessMatch.getCurrentPlayer()) {
-								Thread.sleep(10);
 							}
-							jogo.enviarPartida(chessMatch);
 						} else {
 							chessMatch = jogo.receberPartida();
 							jogo.atualizarPartida(chessMatch);
 						}
 					}
+					jogo.getGameFrame().setVisible(false);
 				} catch (IOException e) {
 					e.printStackTrace();
 				} catch (InterruptedException e) {
@@ -179,34 +180,30 @@ public class Jogar {
 					player.connect(chessMatch, color, true);
 					jogo.getGameFrame().setVisible(false);
 					jogo.setGameFrame(player.getGUI());
+					((BoardGUI) jogo.getGameFrame()).connect(jogo);
 					jogo.start();
 					while (!chessMatch.isCheckMate() && !chessMatch.checkTie()) {
 						if (chessMatch.getCheck())
-							JOptionPane.showMessageDialog(jogo.getGameFrame(), "Você está em xeque, cuidado!", "Xeque", JOptionPane.WARNING_MESSAGE);
+							JOptionPane.showMessageDialog(jogo.getGameFrame(), "Você está em xeque, cuidado!", "Xeque",
+									JOptionPane.WARNING_MESSAGE);
 						if (chessMatch != null && color == chessMatch.getCurrentPlayer()) {
 							while (color == chessMatch.getCurrentPlayer()) {
-								Thread.sleep(10);
 							}
-							jogo.enviarPartida(chessMatch);
 						} else {
 							chessMatch = jogo.receberPartida();
 							jogo.atualizarPartida(chessMatch);
-							if (chessMatch.getCheck())
-								JOptionPane.showMessageDialog(jogo.getGameFrame(), "Você está em xeque, cuidado!", "Xeque", JOptionPane.WARNING_MESSAGE);
 						}
 					}
+					jogo.getGameFrame().setVisible(false);
 				} catch (IOException e) {
 					e.printStackTrace();
-				}	catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				finally {
+				} finally {
 					jogo.fecharServidor();
 				}
 			}
 		} else {
 			ChessMatch chessMatch = new ChessMatch();
-			String[] opcoes = {"Branco", "Preto"};
+			String[] opcoes = { "Branco", "Preto" };
 			int opcaoCor = JOptionPane.showOptionDialog(jogo.getGameFrame(), "Em qual ponto de vista você quer jogar? ",
 					"Cor de treino", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, opcoes, opcoes[0]);
 			ChessColor pov = (opcaoCor == JOptionPane.YES_OPTION) ? ChessColor.WHITE : ChessColor.BLACK;
