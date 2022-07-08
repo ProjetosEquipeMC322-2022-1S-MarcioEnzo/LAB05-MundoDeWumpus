@@ -66,5 +66,78 @@ public interface IPiece extends Serializable {
 A interface IPiece, implementada pela classe Piece, possui vários métodos que podem ser sobrescritos não apenas por peças de xadrez, mas também por qualquer outra peça de outros jogos de tabuleiro que talvez venham a ser criados em possíveis atualizações. Ela põe todos os métodos essenciais para peças de jogos no geral. Um exemplo de polimorfismo e reuso, visto que as classes herdeiras de _Piece_ como _ChessPiece_ e suas herderiras (_King, Queen, Bishop, Knight, Rook, Pawn_) implementaram essa interface permitindo o polimorfismo e o reuso.
 #### A classe Network
 ```
-(inserir classe network e seus destaques)
+package online;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
+public class Network implements INetwork {
+	private ObjectInputStream is;
+	private ObjectOutputStream os;
+	private Socket socket;
+	private ServerSocket serverSocket;
+
+	public Network(String ip, int port) {
+		try {
+			socket = new Socket(ip, port);
+			os = new ObjectOutputStream(socket.getOutputStream());
+			is = new ObjectInputStream(socket.getInputStream());
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public Network(int port) throws IOException {
+		serverSocket = new ServerSocket(port);
+		this.attach();
+	}
+	
+	public void close()  {
+		try {
+			if (serverSocket != null)
+				serverSocket.close();
+			if (socket != null)
+				socket.close();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void send(Object type) throws IOException {
+		os.writeObject(type);
+		os.flush();
+	}
+	
+	public Object read() throws IOException {
+		try {
+			Object obj;	
+			obj = is.readObject();
+			return obj;
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		return null;
+	}
+
+	public void attach() throws IOException {
+			serverSocket.setSoTimeout(50000);
+			socket = serverSocket.accept();
+			is = new ObjectInputStream(socket.getInputStream());
+			os = new ObjectOutputStream(socket.getOutputStream());
+	}
+}
+
 ```
+
+O propósito da classe network é manusear a comunicação entre dois usuários compartilhando um Object, a classe possui os construtores do tipo cliente e servidor e a interface INetwork permite implementação de leitura, envio e fechamento da comunicação entre os usuários.
+ Ao ser chamado o construtor do tipo servidor a porta padrão de esperar conexão de um usuário é 6666, e por 50 segundos uma conexão de um socket é esperado, do lado do cliente é necessário fornecer o ip para conexão, assim um objeto do tipo Socket é instanciado e ambos cliente e servidor recebem esta instância, após isso também instanciam seus atributos do tipo ObjectInputStream e ObjectOutputStream, fornecidas pelo socket da conexão. Os objetos descritos anteriormente funcionam como os canais de recepção/envio de uma stream de bytes correspondendo a um object, sendo S o servidor e C cliente para um par ordenado as mensagens se correspondem da seguinte maneira : S(is,os)-->C(os,is),por exemplo uma mensagem do lado do servidor é escrita na outputstream e o cliente a lê na input stream, como um object, no caso do método read um flush é necessário para controlar a leitura de objetos enviados.
+  Na aplicação do jogo, este em si requere uma INetwork quando chamado o modo multiplayer e dependendo de sua seleção um servidor ou um cliente são instanciados e assim os métodos read e send são utilizados para enviar a partida de xadrez que ambos os jogadores disputam, usando do polimorfismo para operar a comunicaçao.
